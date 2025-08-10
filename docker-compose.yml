@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  price-pred-api:
+    build: .
+    container_name: price-prediction-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./uploads:/app/uploads   # persist uploaded files
+      - ./prediction_log.csv:/app/prediction_log.csv
+    restart: always

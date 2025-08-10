@@ -1,0 +1,11 @@
+location,area_sqft,bhk,age,furnishing,parking,price
+Kadavanthra,1200,2,5,Semi-Furnished,1,8500000
+Panampilly Nagar,1500,3,2,Fully-Furnished,1,12500000
+Edappally,1000,2,10,Unfurnished,0,6200000
+Thrikkakara,1300,3,4,Semi-Furnished,1,9000000
+Vyttila,1100,2,8,Fully-Furnished,0,8000000
+Aluva,1600,4,3,Unfurnished,2,10000000
+Kakkanad,1400,3,5,Semi-Furnished,1,9700000
+Palarivattom,1200,2,6,Unfurnished,0,7500000
+Thevara,1700,4,2,Fully-Furnished,2,13000000
+Kaloor,1000,2,9,Semi-Furnished,1,7200000
