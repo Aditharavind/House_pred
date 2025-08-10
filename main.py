@@ -1,4 +1,3 @@
-
 import nest_asyncio
 import uvicorn
 from fastapi import FastAPI, WebSocket, UploadFile, File
@@ -7,6 +6,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
+from pydantic import BaseModel
 import pandas as pd
 import joblib
 import os
@@ -168,11 +168,40 @@ async def retrain_model(filename: str):
     except Exception as e:
         return {"error": str(e)}
 
+# 📥 Prediction via POST
+class PredictionInput(BaseModel):
+    location: str
+    area_sqft: float
+    bhk: int
+    age: int
+    furnishing: str
+    parking: int
+
+@app.post("/predict")
+def predict_price(data: PredictionInput):
+    trend_price = get_avg_price_per_sqft(data.location)
+    input_data = data.dict()
+
+    if trend_price:
+        input_data["area_sqft"] *= trend_price / 100
+
+    input_df = pd.DataFrame([{
+        "location": input_data["location"],
+        "area_sqft": input_data["area_sqft"],
+        "bhk": input_data["bhk"],
+        "age": input_data["age"],
+        "furnishing": input_data["furnishing"],
+        "parking": input_data["parking"]
+    }])
+
+    prediction = model.predict(input_df)[0]
+    log_prediction(data.dict(), prediction)
+    return {"predicted_price": round(prediction, 2)}
+
 # Root endpoint
 @app.get("/")
 def root():
     return {"message": "🏠 Kochi House Price Prediction API is live"}
 
-# 🚀 Run server locally on Colab
+# 🚀 Run server
 uvicorn.run(app, host="0.0.0.0", port=8000)
-
